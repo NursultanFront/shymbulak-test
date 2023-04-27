@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
+import { onBeforeMount } from 'vue'
+
+onBeforeMount(() => {
+  const res = axios.get(
+    `https://api.openweathermap.org/data/3.0/onecall?lat=${import.meta.env.VITE_API_LAT}&lon=${
+      import.meta.env.VITE_API_LON
+    }&appid=${import.meta.env.VITE_API_KEY}`
+  )
+  console.log(res)
+})
 </script>
 
 <template>
