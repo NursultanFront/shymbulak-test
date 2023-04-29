@@ -22,20 +22,21 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import type { IAsideLinks } from './types';
 
-import ChildrenIcon from './icons/aside/ChildrenIcon.vue';
-import DishIcon from './icons/aside/DishIcon.vue';
-import GlassesIcon from './icons/aside/GlassesIcon.vue';
-import InfoIcon from './icons/aside/InfoIcon.vue';
-import MainIcon from './icons/aside/MainIcon.vue';
-import ParkingIcon from './icons/aside/ParkingIcon.vue';
-import SchoolIcon from './icons/aside/SchoolIcon.vue';
-import ShopIcon from './icons/aside/ShopIcon.vue';
-import StarIcon from './icons/aside/StarIcon.vue';
-import TicketIcon from './icons/aside/TicketIcon.vue';
-import HotelIcon from './icons/aside/HotelIcon.vue';
+import ChildrenIcon from '../icons/aside/ChildrenIcon.vue';
+import DishIcon from '../icons/aside/DishIcon.vue';
+import GlassesIcon from '../icons/aside/GlassesIcon.vue';
+import InfoIcon from '../icons/aside/InfoIcon.vue';
+import MainIcon from '../icons/aside/MainIcon.vue';
+import ParkingIcon from '../icons/aside/ParkingIcon.vue';
+import SchoolIcon from '../icons/aside/SchoolIcon.vue';
+import ShopIcon from '../icons/aside/ShopIcon.vue';
+import StarIcon from '../icons/aside/StarIcon.vue';
+import TicketIcon from '../icons/aside/TicketIcon.vue';
+import HotelIcon from '../icons/aside/HotelIcon.vue';
 
-const asideLinks = [
+const asideLinks: IAsideLinks[] = [
   {
     id: 1,
     text: 'Главная',

@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import axios from 'axios';
-import { onBeforeMount } from 'vue';
 
-import AsideApp from '@/components/AsideApp.vue';
-
-onBeforeMount(() => {
-  const res = axios.get(
-    `https://api.openweathermap.org/data/3.0/onecall?lat=${import.meta.env.VITE_API_LAT}&lon=${
-      import.meta.env.VITE_API_LON
-    }&appid=${import.meta.env.VITE_API_KEY}`
-  );
-  console.log(res);
-});
+import Aside from './components/aside/the-aside.vue';
+import Header from './components/header/the-header.vue';
+import Main from './components/main/the-main.vue';
 </script>
 
 <template>
-  <AsideApp />
+  <div class="app-wrapper">
+    <Aside />
+    <div class="app-content">
+      <Header />
+      <Main />
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.app-wrapper {
+  display: flex;
+}
+
+.app-content {
+  flex-grow: 1;
+}
+</style>
