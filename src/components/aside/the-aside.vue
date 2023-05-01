@@ -1,17 +1,16 @@
 <template>
   <aside class="sidebar">
     <div class="sidebar__wrapper">
-      <RouterLink
-        v-for="{ icon, id, text, to } of asideLinks"
-        class="sidebar__link"
-        :to="to"
-        :key="id"
-      >
-        <div class="sidebar__icon">
-          <component :is="icon" />
-        </div>
-        <span class="sidebar__name">{{ text }}</span>
-      </RouterLink>
+      <ul class="sidebar__list">
+        <li v-for="{ icon, id, text, to } of asideLinks" :key="id" class="slider__item">
+          <RouterLink class="sidebar__link" :to="to">
+            <div class="sidebar__icon">
+              <component :is="icon" />
+            </div>
+            <span class="sidebar__name">{{ text }}</span>
+          </RouterLink>
+        </li>
+      </ul>
       <RouterLink to="#" class="sidebar__btn aside-btn">
         <component :is="InfoIcon" />
         <span class="aside-btn__text">Инфо</span>
@@ -107,6 +106,10 @@ const asideLinks: IAsideLinks[] = [
     flex-direction: column;
     align-items: flex-start;
   }
+  &__list {
+    margin: 0 0 24px;
+  }
+
   &__link {
     display: flex;
     align-items: center;
@@ -124,8 +127,6 @@ const asideLinks: IAsideLinks[] = [
     font-size: 18px;
     line-height: 22px;
     color: #4f5864;
-  }
-  &__btn {
   }
 }
 

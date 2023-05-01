@@ -8,8 +8,8 @@
           <span>live</span>
         </div>
         <div class="header__tempt border-header">
-          <img src="" alt="Weather" />
-          <span>12C</span>
+          <img :src="props.icon" alt="Weather" />
+          <span>{{ props.tempt }} C°</span>
         </div>
         <div class="header__season season border-header">
           <span
@@ -45,11 +45,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 import UserIcon from '../icons/header/UserIcon.vue';
 import HeartIcon from '../icons/header/HeartIcon.vue';
 import CartIcon from '../icons/header/CartIcon.vue';
+
+interface Props {
+  icon: string;
+  tempt: number;
+}
+
+const props = defineProps<Props>();
 
 const getCurrentSeason = computed(() => {
   const now = new Date();
@@ -61,8 +68,6 @@ const getCurrentSeason = computed(() => {
 
   return false;
 });
-
-console.log(getCurrentSeason);
 </script>
 
 <style scoped lang="scss">
@@ -90,7 +95,11 @@ console.log(getCurrentSeason);
   &__tempt {
     display: flex;
     align-items: center;
-    padding: 18px 24px;
+    padding: 16px 24px;
+
+    img {
+      width: 40px;
+    }
   }
 
   &__season {
