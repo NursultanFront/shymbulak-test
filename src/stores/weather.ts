@@ -32,13 +32,12 @@ const getHour = (value: string) => {
   return hour;
 };
 
-const isTimePeriod = (value: string) => {
-  const now = new Date(value);
-  const hours = now.getHours();
-  const sunrise = 6;
-  const sunset = 20;
+const getDayOrNight = (rise: string, set: string) => {
+  const now = new Date();
+  const riseTime = new Date(rise);
+  const setTime = new Date(set);
 
-  if (hours >= sunrise && hours < sunset) {
+  if (now > riseTime && now < setTime) {
     return 'Day';
   } else {
     return 'Night';
@@ -47,6 +46,7 @@ const isTimePeriod = (value: string) => {
 
 const transformDaily = (value: string) => {
   const today = new Date();
+  console.log(today);
   const date = new Date(value);
   return date.toLocaleDateString() === today.toLocaleDateString()
     ? 'Сегодня'
@@ -60,6 +60,7 @@ const formattedDate = (value: string) => {
 
 export const useWeatherStore = defineStore('weather', () => {
   const isLoaded = ref<boolean>(false);
+  const isError = ref<boolean>(false);
 
   const weatherDay = ref<Weather>({
     description: '',
@@ -74,21 +75,21 @@ export const useWeatherStore = defineStore('weather', () => {
   const weatherDaily = ref<DailyWeather[]>([]);
 
   async function getWeatherDay() {
-    const { DailyForecasts } = await api.weather.current('222191', {
+    const res = await api.weather.current('222191', {
       apikey: import.meta.env.VITE_API_KEY,
       language: 'ru',
       metric: true,
       details: true,
     });
+
     weatherDay.value = {
-      description: DailyForecasts[0][isTimePeriod(DailyForecasts[0].Date)].IconPhrase,
+      description: res[0].WeatherText,
       icon: `http://developer.accuweather.com/sites/default/files/${addZero(
-        DailyForecasts[0][isTimePeriod(DailyForecasts[0].Date)].Icon
+        res[0].WeatherIcon
       )}-s.png`,
-      precipitation:
-        DailyForecasts[0][isTimePeriod(DailyForecasts[0].Date)].PrecipitationProbability,
-      wind: DailyForecasts[0][isTimePeriod(DailyForecasts[0].Date)].Wind.Speed.Value,
-      tempt: DailyForecasts[0].Temperature.Maximum.Value,
+      precipitation: res[0].PrecipitationSummary.Precipitation.Metric.Value,
+      wind: res[0].Wind.Speed.Metric.Value,
+      tempt: res[0].Temperature.Metric.Value,
     };
   }
 
@@ -113,31 +114,34 @@ export const useWeatherStore = defineStore('weather', () => {
       apikey: import.meta.env.VITE_API_KEY,
       language: 'ru',
       metric: true,
-      details: false,
+      details: true,
     });
 
-    weatherDaily.value = DailyForecasts.map((item) => ({
-      icon: `http://developer.accuweather.com/sites/default/files/${addZero(
-        item[isTimePeriod(item.Date)].Icon
-      )}-s.png`,
-      maxTempt: item.Temperature.Maximum.Value,
-      minTempt: item.Temperature.Minimum.Value,
-      day: transformDaily(item.Date),
-      formatDate: formattedDate(item.Date),
-    }));
+    weatherDaily.value = DailyForecasts.map((item) => {
+      return {
+        icon: `http://developer.accuweather.com/sites/default/files/${addZero(
+          item.Day.Icon
+        )}-s.png`,
+        maxTempt: item.Temperature.Maximum.Value,
+        minTempt: item.Temperature.Minimum.Value,
+        day: transformDaily(item.Date),
+        formatDate: formattedDate(item.Date),
+      };
+    });
   }
 
   async function init() {
+    isError.value = false;
     isLoaded.value = true;
     try {
-      getHourly();
-      getWeatherDay();
-      getDaily();
+      await getWeatherDay();
+      await getHourly();
+      await getDaily();
     } catch (error) {
-      console.log(error);
+      isError.value = true;
     } finally {
       isLoaded.value = false;
     }
   }
-  return { weatherDay, init, weatherHourly, weatherDaily, isLoaded };
+  return { weatherDay, init, weatherHourly, weatherDaily, isLoaded, isError };
 });

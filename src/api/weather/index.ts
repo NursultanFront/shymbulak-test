@@ -1,6 +1,6 @@
 import type { AxiosInstance } from 'axios';
 import { BasicRest } from '../basic-rest';
-import type { DailyForecastList, HourlyForeCast } from './types';
+import type { CurrentDay, DailyForecastList, HourlyForeCast } from './types';
 
 export class WeatherRest extends BasicRest {
   public constructor(endpoint: AxiosInstance) {
@@ -11,7 +11,7 @@ export class WeatherRest extends BasicRest {
     city: string,
     params: { apikey: string; language: string; metric: boolean; details?: boolean }
   ) {
-    return this.getRequest<DailyForecastList>(`/forecasts/v1/daily/1day/${city}`, params);
+    return this.getRequest<CurrentDay[]>(`/currentconditions/v1/${city}`, params);
   }
 
   public twentyHour(
