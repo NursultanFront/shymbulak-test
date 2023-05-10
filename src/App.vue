@@ -22,7 +22,13 @@ onMounted(async () => {
 
 <template>
   <div class="app-wrapper">
-    <div :class="toggle ? 'bg-dark' : ''" @click="() => toggleSwitch(false)"></div>
+    <div
+      :class="{
+        'bg-dark': toggle,
+        '': !toggle,
+      }"
+      @click="toggleSwitch(false)"
+    ></div>
     <Aside :toggle="toggle" />
     <div class="app-content">
       <Header
