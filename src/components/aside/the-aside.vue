@@ -18,13 +18,16 @@
         <component :is="InfoIcon" />
         <span class="aside-btn__text">Инфо</span>
       </RouterLink>
+      <div class="close-btn" @click="emits('onToggle', false)">
+        <span></span>
+        <span></span>
+      </div>
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import type { IAsideLinks } from './types';
 
 import AsideBtn from '../aside-btn.vue';
 
@@ -40,13 +43,19 @@ import StarIcon from '../icons/aside/StarIcon.vue';
 import TicketIcon from '../icons/aside/TicketIcon.vue';
 import HotelIcon from '../icons/aside/HotelIcon.vue';
 
+interface Emits {
+  (e: 'onToggle', value: boolean): void;
+}
+
 interface Props {
   toggle: boolean;
 }
 
 const props = defineProps<Props>();
 
-const asideLinks: IAsideLinks[] = [
+const emits = defineEmits<Emits>();
+
+const asideLinks = [
   {
     id: 1,
     text: 'Главная',
@@ -169,11 +178,12 @@ const asideLinks: IAsideLinks[] = [
 @media (max-width: 1359px) {
   .sidebar {
     padding: 20px;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     transform: translateX(-100%);
-    z-index: 9;
+    z-index: 10;
+    height: 100%;
     background-color: #ffffff;
     transition: transform 0.3s ease;
 
@@ -184,6 +194,37 @@ const asideLinks: IAsideLinks[] = [
     &.open {
       transform: translateX(0%);
       transition: transform 0.3s ease;
+    }
+  }
+}
+
+@media (max-width: 696px) {
+  .sidebar {
+    width: 100%;
+
+    &__wrapper {
+      position: relative;
+    }
+
+    .close-btn {
+      display: flex;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+
+      span {
+        position: absolute;
+        background-color: black;
+        width: 20px;
+        height: 2px;
+
+        &:first-child {
+          transform: rotate(135deg);
+        }
+        &:last-child {
+          transform: rotate(45deg);
+        }
+      }
     }
   }
 }

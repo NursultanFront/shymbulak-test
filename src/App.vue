@@ -25,11 +25,11 @@ onMounted(async () => {
     <div
       :class="{
         'bg-dark': toggle,
-        '': !toggle,
+        'bg-dark-active': !toggle,
       }"
       @click="toggleSwitch(false)"
     ></div>
-    <Aside :toggle="toggle" />
+    <Aside :toggle="toggle" @onToggle="toggleSwitch" />
     <div class="app-content">
       <Header
         :loading="store.isLoaded"
@@ -64,10 +64,18 @@ onMounted(async () => {
 .bg-dark {
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  z-index: 9;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
+}
+</style>
+
+<style lang="scss" scoped>
+@media (max-width: 696px) {
+  .bg-dark {
+    display: none;
+  }
 }
 </style>
