@@ -8,13 +8,20 @@
         :navigation="true"
         :breakpoints="{
           '320': {
+            slidesPerView: 4,
+          },
+          '467': {
             slidesPerView: 5,
+          },
+
+          '697': {
+            slidesPerView: 4,
           },
           '769': {
             slidesPerView: 5,
           },
           '1024': {
-            slidesPerView: 7,
+            slidesPerView: 6,
             spaceBetween: 10,
           },
         }"
